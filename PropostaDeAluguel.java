@@ -12,7 +12,16 @@ public class PropostaDeAluguel {
 	public long getId() {
 		return id;
 	}
-	
+
+	public String getNomeDaPeca() {
+		return nomeDaPeca;
+	}
+	public float getValorTotalDoAluguel() {
+		return valorTotalDoAluguel;
+	}
+	public String getLocatario() {
+		return locatario;
+	}
 	public void setId(long id) {
 		this.id = System.currentTimeMillis();
 	}
