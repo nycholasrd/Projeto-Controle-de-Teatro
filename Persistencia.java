@@ -1,14 +1,12 @@
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import com.thoughtworks.xstream.security.AnyTypePermission;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
 public class Persistencia {
-
 
     public void salvarCentral(CentralDeInformacoes central, String nomeArquivo) {
 

@@ -28,7 +28,7 @@ public class Pessoa {
 		this.email = email;
 	}
 
-	public String getcpf() {
+	public String getCPF() {
 		return cpf;
 	}
 	public Sexo getSexo() {
@@ -39,13 +39,13 @@ public class Pessoa {
 		this.sexo = sexo;
 	}
 	public String toString() {
-		return "Pessoa + [nome=" + nome + "]";
+		return "Pessoa [Nome:" + " " + nome + "]";
 	}
 
 	public boolean equals(Pessoa p) {
-		String splitcpf = getcpf();
+		String splitcpf = getCPF();
 		String cpf1 = splitcpf.replace(".", "").replace("-", "");
-		String pessoaSplitcpf = p.getcpf();
+		String pessoaSplitcpf = p.getCPF();
 		String cpf2 = pessoaSplitcpf.replace(".", "").replace("-", "");
 		return cpf1.equals(cpf2);
 	}

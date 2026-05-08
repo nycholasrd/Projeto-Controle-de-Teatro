@@ -5,7 +5,7 @@ public class CentralDeInformacoes {
 	
 	public boolean adicionarPessoas(Pessoa pessoa) {
 		for(Pessoa testeP : todasAsPessoas) {
-			if(testeP.getCpf().equals(pessoa.getCpf())){
+			if(testeP.getCPF().equals(pessoa.getCPF())){
 				return false;
 			}
 		}
@@ -24,7 +24,7 @@ public class CentralDeInformacoes {
 	
 	public Pessoa recuperarPessoaPorCPF(String cpf) {
 		for(Pessoa pessoasL : todasAsPessoas) {
-			if(pessoasL.getCpf().equals(cpf)) {
+			if(pessoasL.getCPF().equals(cpf)) {
 				return pessoasL;
 			}
 		}
