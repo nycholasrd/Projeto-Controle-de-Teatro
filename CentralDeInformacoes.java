@@ -1,8 +1,10 @@
+
 import java.util.ArrayList;
 
 public class CentralDeInformacoes {
 	private ArrayList<Pessoa> todasAsPessoas = new ArrayList<>();
 	private ArrayList<PropostaDeAluguel> todasAsPropostas = new ArrayList<>();
+	private ArrayList<RegraPrecoTeatro> todasAsRegrasPreco = new ArrayList<>();
 	
 	
 	public boolean adicionarPessoas(Pessoa pessoa) {
@@ -64,5 +66,54 @@ public class CentralDeInformacoes {
 			}
 		}
 			return null;
+	}
+	
+	public boolean adicionarRegra(RegraPrecoTeatro regra) {
+		for(RegraPrecoTeatro testeR : todasAsRegrasPreco) {
+			if(testeR.getId() == regra.getId()){
+				return false;
+			}
+		}
+		todasAsRegrasPreco.add(regra);
+		return true;
+	}
+	
+	public RegraPrecoTeatro recuperarRegra(){
+		for(RegraPrecoTeatro mostra : todasAsRegrasPreco) {
+			if(mostra != null) {
+				return mostra;
+			}
+		}
+		return null;
+	}
+	// Diferente do método Recuperar Regra, este método tem a funcão de selecionar uma regra e criar uma nova lista com essa regra;
+	public ArrayList<RegraPrecoTeatro> selecionarRegra(int id) {
+		ArrayList<RegraPrecoTeatro> regraSelecionada = new ArrayList<>();
+		for(RegraPrecoTeatro selecao : todasAsRegrasPreco) {
+			if(selecao.getId() == id) {
+				regraSelecionada.add(selecao);
+			}
+		}
+		return regraSelecionada;
+	}
+	
+	public boolean excluirRegraPreco(int id) {
+	    for (int i = 0; i < todasAsRegrasPreco.size(); i++) {
+	        if (todasAsRegrasPreco.get(i).getId() == id) {
+	            todasAsRegrasPreco.remove(i);
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
+	public boolean editarRegraPreco(RegraPrecoTeatro novaRegra) {
+		for(int i = 0; i < todasAsRegrasPreco.size(); i++) {
+			if(todasAsRegrasPreco.get(i).getId() == novaRegra.getId()) {
+				todasAsRegrasPreco.set(i, novaRegra);
+				return true;
+			}
+		}
+		return false;
 	}
 }

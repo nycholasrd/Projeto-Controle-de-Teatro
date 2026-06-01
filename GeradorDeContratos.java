@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 public class GeradorDeContratos {
 
     public static void obterContrato(long idProposta, CentralDeInformacoes central) {
-        PropostaDeAluguel proposta = central.recuperarPropostaPorId(idProposta);
+        PropostaDeAluguel proposta = central.recuperarPropostaPorld(idProposta);
 
         if (proposta == null) {
             System.out.println("Erro: Nenhuma proposta encontrada com o ID " + idProposta);
@@ -28,7 +28,8 @@ public class GeradorDeContratos {
             documento.add(new Paragraph("\n"));
             documento.add(new Paragraph("As partes assumem o compromisso de zelar pela peça durante o período de locação " + "e devolvê-la no estado em que foi entregue."));
             documento.add(new Paragraph("\n\n\n"));
-            documento.add(new Paragraph("__)); documento.add(new Paragraph(" Assinatura do Locador "));
+            documento.add(new Paragraph("__"));
+            	documento.add(new Paragraph(" Assinatura do Locador "));
             documento.add(new Paragraph("\n\n"));
             documento.add(new Paragraph("Assinatura do Locatário (" + proposta.getLocatario() + ")"));
 
