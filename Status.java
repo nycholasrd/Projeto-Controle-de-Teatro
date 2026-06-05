@@ -3,6 +3,6 @@ public enum Status {
 	EM_AVALIACAO,
 	ATIVO,
 	INATIVO,
-	NÃO_CONTRATADO
+	NAO_CONTRATADO
 
 }

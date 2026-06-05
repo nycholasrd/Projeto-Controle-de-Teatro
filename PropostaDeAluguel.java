@@ -16,6 +16,12 @@ public class PropostaDeAluguel {
 	public String getNomeDaPeca() {
 		return nomeDaPeca;
 	}
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 	public float getValorTotalDoAluguel() {
 		return valorTotalDoAluguel;
 	}
@@ -56,6 +62,7 @@ public class PropostaDeAluguel {
 		this.nomeDaPeca = nomeDaPeca;
 		this.valorTotalDoAluguel = valorTotalDoAluguel;
 		this.locatario = locatario;
+        this.status = Status.EM_AVALIACAO;
 	}
 	
 	

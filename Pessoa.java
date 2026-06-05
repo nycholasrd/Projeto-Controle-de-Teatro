@@ -4,7 +4,8 @@ public class Pessoa {
 	private String email;
 	private Sexo sexo;
 	private String cpf;
-
+    private String telefone;
+    private LocalDate dataNascimento;
 
 	public Pessoa(String nome, String email, String cpf) {
 		this.nome = nome;
@@ -15,7 +16,6 @@ public class Pessoa {
 	public String getNome() {
 		return nome;
 	}
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
@@ -23,10 +23,12 @@ public class Pessoa {
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+    public String getTelefone() { return telefone; }
+    public void setTelefone(String telefone) { this.telefone = telefone; }
 
 	public String getcpf() {
 		return cpf;
@@ -41,6 +43,9 @@ public class Pessoa {
 	public String toString() {
 		return "Pessoa + [nome=" + nome + "]";
 	}
+
+    public LocalDate getDataNascimento() { return dataNascimento; }
+    public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
 
 	public boolean equals(Pessoa p) {
 		String splitcpf = getcpf();
