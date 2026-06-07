@@ -68,4 +68,34 @@ public class Mensageiro {
 
         System.out.println("Email enviado!");
     }
+	public static void enviarCodigoRecuperacao(String destinatario, String codigo) throws Exception {
+        final String remetente = "EMAIL@gmail.com"; // seu email
+        final String senha = "SUASENHA"; // sua senha ou app password
+
+        Properties prop = new Properties();
+        prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true");
+
+        Authenticator autenticador = new Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(remetente, senha);
+            }
+        };
+
+        Session sessao = Session.getInstance(prop, autenticador);
+        Message mensagem = new MimeMessage(sessao);
+
+        mensagem.setFrom(new InternetAddress(remetente));
+        mensagem.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
+        mensagem.setSubject("Recuperação de Senha");
+
+        // corpo do e-mail
+        mensagem.setText("Seu código de recuperação é: " + codigo);
+
+        Transport.send(mensagem);
+
+        System.out.println("Código de recuperação enviado para " + destinatario);
+    }
 }

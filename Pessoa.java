@@ -10,6 +10,7 @@ public abstract class Pessoa {
     private String cpf;
     private Cargo cargo;
     private String senha; 
+    private String codigoRecuperacao; // novo campo
 
     public Pessoa(String nome, String email, String cpf, Cargo cargo, String senha) {
         this.nome = nome;
@@ -19,6 +20,7 @@ public abstract class Pessoa {
         this.senha = senha;
     }
 
+    // getters e setters
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
@@ -36,6 +38,11 @@ public abstract class Pessoa {
     public String getSenha() { return senha; }
     public void setSenha(String senha) { this.senha = senha; }
 
+    // novo campo para recuperação de senha
+    public String getCodigoRecuperacao() { return codigoRecuperacao; }
+    public void setCodigoRecuperacao(String codigoRecuperacao) { this.codigoRecuperacao = codigoRecuperacao; }
+
+    // autenticação
     public boolean autenticar(String email, String senha) {
         return this.email.equals(email) && this.senha.equals(senha);
     }
@@ -44,6 +51,7 @@ public abstract class Pessoa {
     public String toString() {
         return "Pessoa [Nome: " + nome + "]";
     }
+
 	public boolean equals(Pessoa p) {
 		String splitcpf = getCPF();
 		String cpf1 = splitcpf.replace(".", "").replace("-", "");
