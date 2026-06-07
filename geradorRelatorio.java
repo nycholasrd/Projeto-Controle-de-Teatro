@@ -37,20 +37,37 @@ public class GeradorDeRelatorio{
             }
         }
     }
-    public void GeradorDePDFPorPeriodo(CentralDeInformacoes ci, PropostaDeAluguel detalhesAluguel, Ingresso ingresso) {
+
+    public void GeradorDePDFPorPeriodo(CentralDeInformacoes ci, PropostaDeAluguel detalhesAluguel, Ingresso ingresso, Usuario usuario) {
         Document relatorioP = new Document();
 
         try {
+            PdfWriter.getInstance(relatorioP, new FileOutputStream("relatorioPeriodo.pdf"));
             relatorioP.open();
+
             relatorioP.add(new Paragraph("RELATÓRIO DE VALORES POR PERÍODO INDICADO"));
-            relatorioP.add(new Paragraph("__________________"));
+            relatorioP.add(new Paragraph("_______________________"));
             relatorioP.add(new Paragraph("Detalhes do Aluguel:"));
             relatorioP.add(new Paragraph("ID da Proposta: " + detalhesAluguel.getId()));
-            relatorioP.add(new Paragraph("Período: /n INICIO:" + detalhesAluguel.getDataDeInicioDoAluguelDate() + "   FIM: " + detalhesAluguel.getDataDeFimDoAluguel()));
-            relatorioP.add(new Paragraph("Valor Total: R$ " + ci.valorTotalDosIngressos()));
-        }catch(Exception e) {
+            relatorioP.add(new Paragraph("Período:\n INÍCIO: " + detalhesAluguel.getDataDeInicioDoAluguelDate() + "    FIM: " + detalhesAluguel.getDataDeFimDoAluguel()));
+            relatorioP.add(new Paragraph("_______________________"));
+            relatorioP.add(new Paragraph("DADOS DA PEÇA"));
+            relatorioP.add(new Paragraph("Nome da Peça: " + detalhesAluguel.getNomeDaPeca()));
+            relatorioP.add(new Paragraph("\n"));
+            relatorioP.add(new Paragraph("[ DADOS DO LOCATÁRIO ]"));
+            relatorioP.add(new Paragraph("Nome/Razão Social: " + usuario.getNome()));
+            relatorioP.add(new Paragraph("CPF/CNPJ do Locatário: " + usuario.getCPF()));
+            relatorioP.add(new Paragraph("\n"));
+            relatorioP.add(new Paragraph("______________________"));
+            relatorioP.add(new Paragraph("VALOR TOTAL: R$ " + ci.valorTotalDosIngressos(ingresso.getIdProposta())));
+            relatorioP.add(new Paragraph("Valor por dia de aluguel : " + detalhesAluguel.valorAluguelPeloPeriodo()));
+            relatorioP.add(new Paragraph("Lucro Líquido do Locatário nesta peça: R$ " + ci.lucroArtistaLocatario(detalhesAluguel)));
+
+            relatorioP.add(new Paragraph("______________________"));
+
+        } catch(Exception e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             if(relatorioP.isOpen()) {
                 relatorioP.close();
             }
