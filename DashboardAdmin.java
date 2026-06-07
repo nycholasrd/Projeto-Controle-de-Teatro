@@ -4,7 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 
 public class DashboardAdmin extends JFrame {
-
+    private CentralDeInformacoes central = new CentralDeInformacoes();
     private JPanel headerPanel;
     private JPanel sidebarPanel;
     private JPanel contentPanel;
@@ -31,7 +31,7 @@ public class DashboardAdmin extends JFrame {
     }
 
     private void criarHeader() {
-    	// De Adones: Criar uma classe específica tanto para Header quanto para SideBar e o conteúdo. 
+
         headerPanel = new JPanel();
         headerPanel.setPreferredSize(
                 new Dimension(1200,70));
@@ -46,7 +46,7 @@ public class DashboardAdmin extends JFrame {
     }
 
     private void criarSidebar()  {
-    	//De Adones: Cada butão fará alguma coisa.
+
         sidebarPanel = new JPanel();
         sidebarPanel.setPreferredSize(
                 new Dimension(200,700));
@@ -70,8 +70,17 @@ public class DashboardAdmin extends JFrame {
         sidebarPanel.add(
                 new JButton("Propostas"));
 
-        sidebarPanel.add(
-                new JButton("Contratos"));
+
+        JButton btnEstenderContrato = new JButton("Estender Contrato");
+        btnEstenderContrato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent e) {
+
+                TelaEstenderContrato tela = new TelaEstenderContrato(central);
+                tela.setVisible(true);
+            }
+        });
+        sidebarPanel.add(btnEstenderContrato);
+
 
         sidebarPanel.add(
                 new JButton("Ingressos"));
@@ -101,7 +110,8 @@ public class DashboardAdmin extends JFrame {
                 new JLabel(
                         "Content Panel"));
     }
-public static void main(String[] args) {
-	DashboardAdmin adm = new DashboardAdmin();
-}
+
+    public static void main(String[] args) {
+        DashboardAdmin adm = new DashboardAdmin();
+    }
 }
