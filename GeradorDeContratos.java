@@ -1,7 +1,10 @@
+package controle;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+
+import classes.PropostaDeAluguel;
 
 import java.io.FileOutputStream;
 import java.io.FileNotFoundException;
@@ -9,7 +12,7 @@ import java.io.FileNotFoundException;
 public class GeradorDeContratos {
 
     public static void obterContrato(long idProposta, CentralDeInformacoes central) {
-        PropostaDeAluguel proposta = central.recuperarPropostaPorld(idProposta);
+        PropostaDeAluguel proposta = central.recuperarPropostaPorId(idProposta);
 
         if (proposta == null) {
             System.out.println("Erro: Nenhuma proposta encontrada com o ID " + idProposta);

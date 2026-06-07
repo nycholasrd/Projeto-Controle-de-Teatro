@@ -1,56 +1,53 @@
+package classes;
 
-public class Pessoa {
-	private String nome;
-	private String email;
-	private Sexo sexo;
-	private String cpf;
-    private String telefone;
-    private LocalDate dataNascimento;
+import enums.Cargo;
+import enums.Sexo;
 
-	public Pessoa(String nome, String email, String cpf) {
-		this.nome = nome;
-		this.email = email;
-		this.cpf = cpf;
-	}
+public abstract class Pessoa {
+    private String nome;
+    private String email;
+    private Sexo sexo;
+    private String cpf;
+    private Cargo cargo;
+    private String senha; 
 
-	public String getNome() {
-		return nome;
-	}
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public Pessoa(String nome, String email, String cpf, Cargo cargo, String senha) {
+        this.nome = nome;
+        this.email = email;
+        this.cpf = cpf;
+        this.cargo = cargo;
+        this.senha = senha;
+    }
 
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getNome() { return nome; }
+    public void setNome(String nome) { this.nome = nome; }
 
-    public String getTelefone() { return telefone; }
-    public void setTelefone(String telefone) { this.telefone = telefone; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-	public String getcpf() {
-		return cpf;
-	}
-	public Sexo getSexo() {
-		return sexo;
-	}
+    public String getCPF() { return cpf; }
 
-	public void setSexo(Sexo sexo) {
-		this.sexo = sexo;
-	}
-	public String toString() {
-		return "Pessoa + [nome=" + nome + "]";
-	}
+    public Sexo getSexo() { return sexo; }
+    public void setSexo(Sexo sexo) { this.sexo = sexo; }
 
-    public LocalDate getDataNascimento() { return dataNascimento; }
-    public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
+    public Cargo getCargo() { return cargo; }
+    public void setCargo(Cargo cargo) { this.cargo = cargo; }
 
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
+
+    public boolean autenticar(String email, String senha) {
+        return this.email.equals(email) && this.senha.equals(senha);
+    }
+
+    @Override
+    public String toString() {
+        return "Pessoa [Nome: " + nome + "]";
+    }
 	public boolean equals(Pessoa p) {
-		String splitcpf = getcpf();
+		String splitcpf = getCPF();
 		String cpf1 = splitcpf.replace(".", "").replace("-", "");
-		String pessoaSplitcpf = p.getcpf();
+		String pessoaSplitcpf = p.getCPF();
 		String cpf2 = pessoaSplitcpf.replace(".", "").replace("-", "");
 		return cpf1.equals(cpf2);
 	}

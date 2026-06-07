@@ -1,3 +1,5 @@
+package classes;
+
 public class RegistroPresenca {
     private String nomeCliente;
     private String cpfCliente;

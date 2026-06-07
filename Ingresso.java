@@ -1,3 +1,4 @@
+package classes;
 import java.time.LocalDateTime;
 
 public class Ingresso {
@@ -6,6 +7,9 @@ public class Ingresso {
     private String cpfCliente;
     private int quantidade;
     private LocalDateTime dataVenda;
+    private double valorUnitario;
+    public double getValorTotal() { return quantidade * valorUnitario; }
+
 
     public Ingresso(long idProposta, String cpfCliente, int quantidade) {
         this.id = System.currentTimeMillis();
@@ -20,4 +24,5 @@ public class Ingresso {
     public String getCpfCliente() { return cpfCliente; }
     public int getQuantidade() { return quantidade; }
     public LocalDateTime getDataVenda() { return dataVenda; }
+    public double getValorUnitario() { return valorUnitario; }
 }

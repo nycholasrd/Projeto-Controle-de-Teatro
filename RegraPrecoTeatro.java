@@ -1,7 +1,9 @@
+package classes;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.Month;
 import java.time.LocalDateTime;
+import enums.Turno;
 
 public class RegraPrecoTeatro {
 	
