@@ -1,17 +1,72 @@
-
+package controle;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.time.LocalDate;
+
+import classes.Ingresso;
+import classes.Pessoa;
+import classes.PropostaDeAluguel;
+import classes.RegistroPresenca;
+import classes.Administrador;
 
 public class CentralDeInformacoes {
     private ArrayList<Pessoa> todasAsPessoas = new ArrayList<>();
     private ArrayList<PropostaDeAluguel> todasAsPropostas = new ArrayList<>();
-    private ArrayList<RegraPrecoTeatro> todasAsRegrasPreco = new ArrayList<>();
     private ArrayList<Ingresso> todosOsIngressos = new ArrayList<>();
+    private ArrayList<RegistroPresenca> presencas = new ArrayList<>();
+    private Administrador administrador;
+
+    public Administrador getAdministrador() {
+        return administrador;
+    }
+
+    public void setAdministrador(Administrador administrador) {
+        this.administrador = administrador;
+    }
+
+    public void atualizarAdministrador(String nome, String email, String senha) {
+        if (administrador != null) {
+            administrador.setNome(nome);
+            administrador.setEmail(email);
+            administrador.alterarSenha(senha);
+        }
+    }
+    public ArrayList<Ingresso> getIngressos() {
+        return todosOsIngressos;
+    }
+    public ArrayList<RegistroPresenca> getPresencas() {
+        return presencas;
+    }
+
+    public boolean adicionarPresenca(RegistroPresenca presenca) {
+
+        for (RegistroPresenca p : presencas) {
+            if (p.getCpfCliente().equals(presenca.getCpfCliente())) {
+
+                p.adicionarIngressos(presenca.getQuantidadeIngressos());
+                return true;
+            }
+        }
+        presencas.add(presenca);
+        return true;
+    }
+
+    public boolean removerPresencaPorCpf(String cpf) {
+        return presencas.removeIf(p -> p.getCpfCliente().equals(cpf));
+    }
+
+    public boolean adicionarIngresso(Ingresso ingresso) {
+        for (Ingresso i : todosOsIngressos) {
+            if (i.getId() == ingresso.getId()) {
+                return false;
+            }
+        }
+        todosOsIngressos.add(ingresso);
+        return true;
+    }
+
 
     public boolean adicionarPessoas(Pessoa pessoa) {
-        for (Pessoa testeP : todasAsPessoas) {
-            if (testeP.getCpf().equals(pessoa.getCpf())) {
+        for(Pessoa testeP : todasAsPessoas) {
+            if(testeP.getCPF().equals(pessoa.getCPF())){
                 return false;
             }
         }
@@ -23,14 +78,34 @@ public class CentralDeInformacoes {
     public ArrayList<Pessoa> getTodasAsPessoas() {
         return todasAsPessoas;
     }
+    public ArrayList<PropostaDeAluguel> getTodasAsPropostas() {
+        return todasAsPropostas;
+    }
 
     public void setTodasAsPessoas(ArrayList<Pessoa> todasAsPessoas) {
         this.todasAsPessoas = todasAsPessoas;
     }
+    public Pessoa autenticarPessoas(String email, String senha) {
+
+        if (administrador != null && administrador.autenticar(email, senha)) {
+            return administrador;
+        }
+
+
+        for (Pessoa p : todasAsPessoas) {
+            if (p.autenticar(email, senha)) {
+                return p;
+            }
+        }
+
+
+        return null;
+    }
+
 
     public boolean adicionarPropostas(PropostaDeAluguel p) {
-        for (PropostaDeAluguel testePp : todasAsPropostas) {
-            if (testePp.getId() == p.getId()) {
+        for(PropostaDeAluguel testePp : todasAsPropostas) {
+            if(testePp.getId() == p.getId()) {
                 return false;
             }
         }
@@ -38,192 +113,100 @@ public class CentralDeInformacoes {
         return true;
     }
 
-    public PropostaDeAluguel recuperarPropostaPorld(long id) {
-        for (PropostaDeAluguel testePp : todasAsPropostas) {
-            if (testePp.getId() == id) {
-                return testePp;
+    public PropostaDeAluguel recuperarPropostaPorId(long id) {
+        for (PropostaDeAluguel proposta : todasAsPropostas) {
+            if (proposta.getId() == id) {
+                return proposta;
             }
         }
         return null;
-    }
-
-    public ArrayList<PropostaDeAluguel> getTodasAsPropostas() {
-        return todasAsPropostas;
     }
 
     public ArrayList<PropostaDeAluguel> recuperarPropostaDeUmaPessoa(String cpf) {
         ArrayList<PropostaDeAluguel> propostasPorLocatario = new ArrayList<>();
 
 
-        for (PropostaDeAluguel procura : todasAsPropostas) {
-            if (procura.getLocatario() == null) {
-                continue;
+        for(PropostaDeAluguel procura : todasAsPropostas) {
+            if(procura.getLocatario() == null) {
+                return null;
             }
-            if (procura.getLocatario().equals(cpf)) {
+            if(procura.getLocatario().equals(cpf)) {
                 propostasPorLocatario.add(procura);
             }
         }
         return propostasPorLocatario;
     }
-
     public Pessoa recuperarPessoaPorCPF(String cpf) {
-        for (Pessoa pessoasL : todasAsPessoas) {
-            if (pessoasL.getCpf().equals(cpf)) {
+        for(Pessoa pessoasL : todasAsPessoas) {
+            if(pessoasL.getCPF().equals(cpf)) {
                 return pessoasL;
             }
         }
         return null;
     }
 
-    public boolean adicionarRegra(RegraPrecoTeatro regra) {
-        for (RegraPrecoTeatro testeR : todasAsRegrasPreco) {
-            if (testeR.getId() == regra.getId()) {
-                return false;
-            }
-        }
-        todasAsRegrasPreco.add(regra);
-        return true;
+    public double lucroArtistaLocatario(PropostaDeAluguel pa) {
+        double valor = valorTotalDosIngressos(pa.getId()) - pa.getValorTotalDoAluguel();
+        return valor;
     }
 
-    public RegraPrecoTeatro recuperarRegra() {
-        for (RegraPrecoTeatro mostra : todasAsRegrasPreco) {
-            if (mostra != null) {
-                return mostra;
+    public double valorTotalDosIngressos(long idProposta) {
+        double total = 0.0;
+        for (Ingresso ingresso : todosOsIngressos) {
+            if (ingresso.getIdProposta() == idProposta) {
+                total += (ingresso.getValorUnitario() * ingresso.getQuantidade());
             }
         }
-        return null;
-    }
-
-    public ArrayList<RegraPrecoTeatro> selecionarRegra(int id) {
-        ArrayList<RegraPrecoTeatro> regraSelecionada = new ArrayList<>();
-        for (RegraPrecoTeatro selecao : todasAsRegrasPreco) {
-            if (selecao.getId() == id) {
-                regraSelecionada.add(selecao);
-            }
-        }
-        return regraSelecionada;
-    }
-
-    public boolean excluirRegraPreco(int id) {
-        for (int i = 0; i < todasAsRegrasPreco.size(); i++) {
-            if (todasAsRegrasPreco.get(i).getId() == id) {
-                todasAsRegrasPreco.remove(i);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean editarRegraPreco(RegraPrecoTeatro novaRegra) {
-        for (int i = 0; i < todasAsRegrasPreco.size(); i++) {
-            if (todasAsRegrasPreco.get(i).getId() == novaRegra.getId()) {
-                todasAsRegrasPreco.set(i, novaRegra);
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    public ArrayList<PropostaDeAluguel> filtrarPropostas(String termoBusca, Status statusProcurado) {
-        ArrayList<PropostaDeAluguel> propostasFiltradas = new ArrayList<>();
-
-        for (PropostaDeAluguel proposta : todasAsPropostas) {
-
-            boolean atendeFiltroTexto = false;
-            boolean atendeFiltroStatus = false;
-
-
-            if (termoBusca == null || termoBusca.trim().isEmpty()) {
-                atendeFiltroTexto = true;
-            } else {
-                String busca = termoBusca.toLowerCase();
-
-
-                String locatario = proposta.getLocatario() != null ? proposta.getLocatario().toLowerCase() : "";
-                String peca = proposta.getNomeDaPeca() != null ? proposta.getNomeDaPeca().toLowerCase() : "";
-
-                if (locatario.contains(busca) || peca.contains(busca)) {
-                    atendeFiltroTexto = true;
-                }
-            }
-
-
-            if (statusProcurado == null) {
-                atendeFiltroStatus = true;
-            } else if (proposta.getStatus() == statusProcurado) {
-                atendeFiltroStatus = true;
-            }
-
-
-            if (atendeFiltroTexto && atendeFiltroStatus) {
-                propostasFiltradas.add(proposta);
-            }
-        }
-
-        return propostasFiltradas;
-    }
-
-    public boolean promoverParaContrato(long idProposta) {
-        PropostaDeAluguel proposta = recuperarPropostaPorld(idProposta);
-
-        if (proposta != null && proposta.getStatus() == Status.EM_AVALIACAO) {
-            proposta.setStatus(Status.ATIVO);
-            return true;
-        }
-
-        return false;
-    }
-
-    public boolean realizarVendaIngresso(String cpf, long idProposta, int quantidade) {
-        PropostaDeAluguel peca = recuperarPropostaPorld(idProposta);
-
-
-        if (peca != null && peca.getStatus() == Status.ATIVO) {
-            Ingresso novaVenda = new Ingresso(idProposta, cpf, quantidade);
-            todosOsIngressos.add(novaVenda);
-
-
-
-            return true;
-        }
-
-        return false;
+        return total;
     }
 
     public ArrayList<Ingresso> getTodosOsIngressos() {
         return todosOsIngressos;
     }
-    public ArrayList<RegistroPresenca> gerarListaPresenca(long idProposta, LocalDate dataFiltro) {
-        HashMap<String, RegistroPresenca> mapaPresenca = new HashMap<>();
 
-        for (Ingresso ingresso : todosOsIngressos) {
-            if (ingresso.getIdProposta() == idProposta) {
+    public String estenderContrato(long idProposta, LocalDate novaDataFim) {
+        PropostaDeAluguel peca = recuperarPropostaPorld(idProposta);
 
-                boolean atendeData = true;
-                if (dataFiltro != null) {
-                    LocalDate dataCompra = ingresso.getDataVenda().toLocalDate();
-                    if (!dataCompra.equals(dataFiltro)) {
-                        atendeData = false;
-                    }
-                }
 
-                if (atendeData) {
-                    String cpf = ingresso.getCpfCliente();
+        if (peca == null || (peca.getStatus() != Status.ATIVO && peca.getStatus() != Status.CONTRATADO_COM_ALTERACAO)) {
+            return "ERRO: O contrato não existe ou não está ativo no momento.";
+        }
 
-                    if (mapaPresenca.containsKey(cpf)) {
-                        RegistroPresenca reg = mapaPresenca.get(cpf);
-                        reg.adicionarIngressos(ingresso.getQuantidade());
-                    } else {
-                        Pessoa cliente = recuperarPessoaPorCPF(cpf);
-                        String nome = (cliente != null) ? cliente.getNome() : "Nome não encontrado";
 
-                        mapaPresenca.put(cpf, new RegistroPresenca(nome, cpf, ingresso.getQuantidade()));
-                    }
+        if (!novaDataFim.isAfter(peca.getDataDeFimDoAluguel())) {
+            return "ERRO: A nova data de fim deve ser posterior à data de término atual (" + peca.getDataDeFimDoAluguel() + ").";
+        }
+
+
+        LocalDate inicioExtensao = peca.getDataDeFimDoAluguel().plusDays(1);
+
+
+        for (PropostaDeAluguel outraPeca : todasAsPropostas) {
+
+            if (outraPeca.getId() != idProposta &&
+                    (outraPeca.getStatus() == Status.ATIVO || outraPeca.getStatus() == Status.EM_AVALIACAO || outraPeca.getStatus() == Status.CONTRATADO_COM_ALTERACAO)) {
+
+
+                boolean temConflito = !inicioExtensao.isAfter(outraPeca.getDataDeFimDoAluguel()) && !novaDataFim.isBefore(outraPeca.getDataDeInicioDoAluguelDate());
+
+                if (temConflito) {
+                    return "ERRO: Conflito de calendário! As datas colidem com a peça: '" + outraPeca.getNomeDaPeca() + "'.";
                 }
             }
         }
 
-        return new ArrayList<>(mapaPresenca.values());
+        long diasOriginais = ChronoUnit.DAYS.between(peca.getDataDeInicioDoAluguelDate(), peca.getDataDeFimDoAluguel()) + 1;
+        float valorDiaria = peca.getValorTotalDoAluguel() / diasOriginais;
+
+
+        long diasExtras = ChronoUnit.DAYS.between(inicioExtensao, novaDataFim) + 1;
+        float valorAdicional = valorDiaria * diasExtras;
+
+
+        peca.setDataDeFimDoAluguel(novaDataFim);
+        peca.setValorTotalDoAluguel(peca.getValorTotalDoAluguel() + valorAdicional);
+        peca.setStatus(Status.CONTRATADO_COM_ALTERACAO);
+
+
+        return "SUCESSO: Contrato estendido até " + novaDataFim + ".\nValor adicional cobrado: R$ " + String.format("%.2f", valorAdicional) + "\nNovo valor total do aluguer: R$ " + String.format("%.2f", peca.getValorTotalDoAluguel());
     }
-}
